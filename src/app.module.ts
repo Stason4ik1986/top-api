@@ -11,6 +11,7 @@ import { getMongoConfig } from './configs/mongo.config';
 
 import { AppService } from './app.service';
 import { AppController } from './app.controller';
+import { FilesModule } from './files/files.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { AppController } from './app.controller';
     ReviewModule,
     TopPageModule,
     ProductModule,
+    FilesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
