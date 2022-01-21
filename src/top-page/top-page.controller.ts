@@ -15,7 +15,6 @@ import {
 } from '@nestjs/common';
 
 import { IdValidationPipe } from '../pipes/id-validation.pipe';
-import { TopPageModel } from './top-page.model';
 import { PAGE_NOT_FOUND } from './top-page.constants';
 import { TopPageService } from './top-page.service';
 import { FindTopPageDto } from './dto/find-top-page.dto';
@@ -24,7 +23,7 @@ import { CreateTopPageDto } from './dto/create-top-page.dto';
 @Controller('top-page')
 export class TopPageController {
 
-  constructor(private _topPageService: TopPageService) { }
+  constructor(private readonly _topPageService: TopPageService) { }
 
   @UseGuards(JwtAuthGuard)
   @Post('create')

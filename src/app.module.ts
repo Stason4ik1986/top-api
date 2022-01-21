@@ -12,6 +12,7 @@ import { getMongoConfig } from './configs/mongo.config';
 import { AppService } from './app.service';
 import { AppController } from './app.controller';
 import { FilesModule } from './files/files.module';
+import { SitemapModule } from './sitemap/sitemap.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { FilesModule } from './files/files.module';
     TopPageModule,
     ProductModule,
     FilesModule,
+    SitemapModule,
   ],
   controllers: [AppController],
   providers: [AppService],
