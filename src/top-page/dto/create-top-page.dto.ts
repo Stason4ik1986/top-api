@@ -1,5 +1,5 @@
 import { Type } from 'class-transformer';
-import { IsArray, IsEnum, IsNumber, IsObject, IsOptional, IsString, ValidateNested } from 'class-validator';
+import { IsArray, IsDate, IsEnum, IsNumber, IsOptional, IsString, ValidateNested } from 'class-validator';
 import { TopLevelCategory } from '../top-page.model';
 
 class HhDataDto {
@@ -15,6 +15,9 @@ class HhDataDto {
 
   @IsNumber()
   seniorSalary: number;
+
+  @IsDate()
+  updatedAt: Date;
 }
 
 class TopPageAdvantageDto {

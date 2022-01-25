@@ -1,4 +1,3 @@
-import { JwtAuthGuard } from './../auth/guards/jwt.guard';
 import {
   Get,
   Post,
@@ -13,17 +12,25 @@ import {
   ValidationPipe,
   UseGuards,
 } from '@nestjs/common';
+import { Cron, CronExpression, SchedulerRegistry } from '@nestjs/schedule';
 
+import { JwtAuthGuard } from './../auth/guards/jwt.guard';
 import { IdValidationPipe } from '../pipes/id-validation.pipe';
 import { PAGE_NOT_FOUND } from './top-page.constants';
-import { TopPageService } from './top-page.service';
 import { FindTopPageDto } from './dto/find-top-page.dto';
 import { CreateTopPageDto } from './dto/create-top-page.dto';
+
+import { HhService } from 'src/hh/hh.service';
+import { TopPageService } from './top-page.service';
 
 @Controller('top-page')
 export class TopPageController {
 
-  constructor(private readonly _topPageService: TopPageService) { }
+  constructor(
+    private readonly _schedulerRegistry: SchedulerRegistry,
+    private readonly _hhService: HhService,
+    private readonly _topPageService: TopPageService,
+  ) { }
 
   @UseGuards(JwtAuthGuard)
   @Post('create')
@@ -85,9 +92,21 @@ export class TopPageController {
     return this._topPageService.findByCategory(dto.firstCategory);
   }
 
-  @Post('textSearch/:text')
+  @Get('textSearch/:text')
   async textSearch(@Param('text') text: string,) {
     return this._topPageService.findByText(text);
+  }
+
+  @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT, { name: 'test' })
+  async test() {
+    const data = await this._topPageService.findForHhUpdate(new Date());
+    const job = this._schedulerRegistry.getCronJob('test');
+    for (const page of data) {
+      const hhData = await this._hhService.getData(page.category);
+      page.hh = hhData;
+
+      await this._topPageService.updateById(page._id, page as CreateTopPageDto)
+    }
   }
 
 }

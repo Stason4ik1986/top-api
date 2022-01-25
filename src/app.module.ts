@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 
 import { TypegooseModule } from 'nestjs-typegoose';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ScheduleModule } from '@nestjs/schedule';
 
 import { AuthModule } from './auth/auth.module';
 import { FilesModule } from './files/files.module';
@@ -16,9 +17,11 @@ import { getTelegramConfig } from './configs/telegram.config';
 
 import { AppService } from './app.service';
 import { AppController } from './app.controller';
+import { HhModule } from './hh/hh.module';
 @Module({
   imports: [
     ConfigModule.forRoot(),
+    ScheduleModule.forRoot(),
     TypegooseModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -35,6 +38,7 @@ import { AppController } from './app.controller';
       inject: [ConfigService],
       useFactory: getTelegramConfig
     }),
+    HhModule,
   ],
   controllers: [AppController],
   providers: [AppService],
